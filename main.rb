@@ -50,7 +50,7 @@ end
 def thumbnail(post_metadata)
   return post_metadata['thumbnail_src'] if post_metadata['thumbnail_resources'].nil?
 
-  post_metadata['thumbnail_resources'].first(2).last
+  post_metadata['thumbnail_resources'].first(2).last['src']
 end
 
 def copy_files_and_create_index(metadata, new_dir, file_path, file_name)
