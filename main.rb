@@ -27,7 +27,7 @@ def get_index_file(metadata, post_id, file_name)
   title = file_name.rpartition('.')[0]
   content = "---\n"
   post_metadata = metadata.detect {|post| post["urls"].any? {|url| url.include?(post_id)}}
-  description = if post_metadata['edge_media_to_caption']['edges'].any?
+  description = if !post_metadata.nil? and post_metadata['edge_media_to_caption']['edges'].any?
     then post_metadata['edge_media_to_caption']['edges'][0]['node']['text']
     else "" end
   # Dont use thumbnail if post is an album (blog has no album functionality, so thumbnails won't make sense)
