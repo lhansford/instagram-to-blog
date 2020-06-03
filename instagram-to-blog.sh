@@ -1,7 +1,7 @@
 # Fetch images/vids
-# instagram-scraper $INSTAGRAM_USERNAME --latest-stamps ~/Dropbox/Inbox/Instagram/history.log --media-metadata -u $INSTAGRAM_USERNAME -p $INSTAGRAM_PASSWORD -d ~/Dropbox/Inbox/Instagram -T {year}-{month}-{day}_{urlname} -i
-# ruby main.rb
-rm instagram-scraper.log
+instaloader $INSTAGRAM_USERNAME --fast-update --dirname-pattern  ~/Dropbox/Images/Instagram --filename-pattern="{date_utc:%Y-%m-%d}-{mediaid}"  --no-metadata-json  --post-metadata-txt="{shortcode}|{date_utc:%Y-%m-%d %H:%M}|{caption}"  --no-profile-pic
+
+ruby main.rb
 git -C /Users/luke/Documents/development/lukehansford.me add .
 git -C /Users/luke/Documents/development/lukehansford.me commit -am "Updated instagram posts"
 git -C /Users/luke/Documents/development/lukehansford.me push
