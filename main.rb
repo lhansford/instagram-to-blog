@@ -39,7 +39,7 @@ def get_index_file(post_id, post_hash)
   content += "\ndate: #{date}"
   content += "\nimages: #{image_paths.join(',')}"
   content += "\nvideos: #{video_paths.join(',')}"
-  content += "---\n"
+  content += "\n---\n"
 end
 
 def copy_files_and_create_index(post_dir, post_id, post_hash)
