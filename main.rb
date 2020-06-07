@@ -25,26 +25,29 @@ def get_index_file(post_id, post_hash)
     "/photos/#{post_id}/#{image_file_name}"
   end
 
-  thumbnail = "/photos/#{post_id}/#{image_paths[0]}"
+  video_paths = post_hash[:videos].map do |video_path|
+    _, _, video_file_name = video_path.rpartition("/")
+
+    "/photos/#{post_id}/#{video_file_name}"
+  end
 
   content += "title: #{post_id}"
   content += "\ndescription: #{post_content}"
   content += "\nlink: https://www.instagram.com/p/#{shortcode}"
-  content += "\nthumbnail: #{thumbnail}"
+  content += "\nthumbnail: #{image_paths[0]}"
   content += "\nauthor: luke"
   content += "\ndate: #{date}"
   content += "\nimages: #{image_paths.join(',')}"
-  if post_hash[:video].nil?
-    content + "\ntemplate: photo.hbs\n---"
-  else
-    content + "\ntemplate: video.hbs\n---"
-  end
+  content += "\nvideos: #{video_paths.join(',')}"
+  content += "---\n"
 end
 
 def copy_files_and_create_index(post_dir, post_id, post_hash)
-  FileUtils.cp(post_hash[:video], post_dir + '/') unless post_hash[:video].nil?
   FileUtils.cp(post_hash[:text], post_dir + '/')
   post_hash[:images].each do |file_path|
+    FileUtils.cp(file_path, post_dir + '/')
+  end
+  post_hash[:videos].each do |file_path|
     FileUtils.cp(file_path, post_dir + '/')
   end
 
@@ -65,12 +68,12 @@ def collect_files
     filename, _, extension = filename.rpartition('.')
     name, _, last = filename.rpartition('_') # For when a post has multiple images
     name = last if name.empty?
-    files[name] = { video: nil, images: [], text: nil } if files[name].nil?
+    files[name] = { videos: [], images: [], text: nil } if files[name].nil?
 
     if extension == 'txt'
       files[name][:text] = file_path
     elsif extension == 'mp4'
-      files[name][:video] = file_path
+      files[name][:videos] << file_path
     elsif extension == 'jpg'
       files[name][:images] << file_path
     end
